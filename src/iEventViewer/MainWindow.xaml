@@ -1,0 +1,18 @@
+﻿<Window x:Class="iEventViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="550" Width="825">
+    <Grid>
+        <DataGrid Name="eventsDataGrid" ItemsSource="{Binding Path=DisplayedEvents}" AutoGenerateColumns="False" 
+                  Margin="0, 10, 0, 0" GridLinesVisibility="None">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" IsReadOnly="True" Binding="{Binding Path=TimeGenerated, Converter={StaticResource DateConverter}}" />
+                <DataGridTextColumn Header="Level" IsReadOnly="True" Binding="{Binding Path=EntryType}" />
+                <DataGridTextColumn Header="Message" IsReadOnly="True" Binding="{Binding Path=Message}" />
+            </DataGrid.Columns>
+            <DataGrid.AlternatingRowBackground>
+                <SolidColorBrush Color="LightGray" />
+            </DataGrid.AlternatingRowBackground>
+        </DataGrid>
+    </Grid>
+</Window>

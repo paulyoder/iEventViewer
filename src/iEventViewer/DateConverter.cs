@@ -11,7 +11,7 @@ namespace iEventViewer
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ((DateTime)value).ToShortTimeString().ToLower() + Environment.NewLine + ((DateTime)value).ToString("MMM d");
+            return ((DateTime)value).ToString("MMM d h:mm tt");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

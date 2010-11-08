@@ -1,18 +1,61 @@
 ﻿<Window x:Class="iEventViewer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="550" Width="825">
+        Title="MainWindow" Height="550" Width="825" FontFamily="Arial">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Label Content="Computer Name" />
+            <TextBox Text="{Binding Path=ComputerName, Mode=TwoWay}" Width="200" HorizontalAlignment="Left" />
+            <TextBox Width="200" HorizontalAlignment="Left" />
+        </StackPanel>
         <DataGrid Name="eventsDataGrid" ItemsSource="{Binding Path=DisplayedEvents}" AutoGenerateColumns="False" 
-                  Margin="0, 10, 0, 0" GridLinesVisibility="None">
+                  Grid.Row="1" GridLinesVisibility="None" RowHeaderWidth="0" FontSize="14">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Time" IsReadOnly="True" Binding="{Binding Path=TimeGenerated, Converter={StaticResource DateConverter}}" />
-                <DataGridTextColumn Header="Level" IsReadOnly="True" Binding="{Binding Path=EntryType}" />
-                <DataGridTextColumn Header="Message" IsReadOnly="True" Binding="{Binding Path=Message}" />
+                <DataGridTemplateColumn Header="Info" IsReadOnly="True" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=TimeGenerated, Converter={StaticResource DateConverter}}">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock Text="Time Stamp" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Path=EntryType}" FontFamily="Courier New">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock Text="Level" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Path=Source}" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock Text="Source" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Message" IsReadOnly="True" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Message}" TextWrapping="WrapWithOverflow" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.AlternatingRowBackground>
                 <SolidColorBrush Color="LightGray" />
             </DataGrid.AlternatingRowBackground>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Height" Value="25" />
+                    <Setter Property="Background" Value="{StaticResource HeaderBackground}" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
         </DataGrid>
     </Grid>
 </Window>

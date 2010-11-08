@@ -5,5 +5,10 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:DateConverter x:Key="DateConverter" />
+        
+        <LinearGradientBrush x:Key="HeaderBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="#4C94C6" />
+            <GradientStop Offset="1" Color="#185CA2" />
+        </LinearGradientBrush>
     </Application.Resources>
 </Application>

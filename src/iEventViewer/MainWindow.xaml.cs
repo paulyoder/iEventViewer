@@ -14,18 +14,7 @@ namespace iEventViewer
         {
             InitializeComponent();
 
-            Model = new ViewModel();
-            Model.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Model_PropertyChanged);
-            DataContext = Model;
-        }
-
-        void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ComputerName")
-            {
-                var repo = new EventRepository();
-                Model.ImportEvents(repo.GetEvents(Model.ComputerName, "Application"));
-            }
+            DataContext = new ViewModel();
         }
     }
 }

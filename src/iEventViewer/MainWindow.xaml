@@ -11,20 +11,28 @@
             <Label Content="Computer Name" />
             <TextBox Text="{Binding Path=ComputerName, Mode=TwoWay}" Width="200" HorizontalAlignment="Left" />
             <TextBox Width="200" HorizontalAlignment="Left" />
+            <ComboBox ItemsSource="{Binding LogNames}"
+                      SelectedValue="{Binding Path=SelectedLogName}"
+                      Width="200"
+                      HorizontalAlignment="Left" />
+            <Button Content="Next Page"
+                    Command="{Binding GetNextPage}"
+                    Width="200"
+                    HorizontalAlignment="Left" />
         </StackPanel>
         <DataGrid Name="eventsDataGrid" ItemsSource="{Binding Path=DisplayedEvents}" AutoGenerateColumns="False" 
                   Grid.Row="1" GridLinesVisibility="None" RowHeaderWidth="0" FontSize="14">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Info" IsReadOnly="True" Width="150">
+                <DataGridTemplateColumn Header=" Info" IsReadOnly="True" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="{Binding Path=TimeGenerated, Converter={StaticResource DateConverter}}">
+                                <TextBlock Text="{Binding Path=TimeGenerated, Converter={StaticResource DateConverter}}" Margin="0,0,0,3">
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="Time Stamp" />
                                     </TextBlock.ToolTip>
                                 </TextBlock>
-                                <TextBlock Text="{Binding Path=EntryType}" FontFamily="Courier New">
+                                <TextBlock Text="{Binding Path=EntryType}" FontFamily="Courier New" Margin="0,0,0,3" Background="Gray" Foreground="FloralWhite">
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="Level" />
                                     </TextBlock.ToolTip>
@@ -38,10 +46,12 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Message" IsReadOnly="True" Width="*">
+                <DataGridTemplateColumn Header=" Message" IsReadOnly="True" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Message}" TextWrapping="WrapWithOverflow" />
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" MaxHeight="100">
+                                <TextBlock Text="{Binding Path=Message}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top"/>
+                            </ScrollViewer>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

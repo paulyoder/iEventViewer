@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace iEventViewer
 {
@@ -10,6 +11,11 @@ namespace iEventViewer
             var eventLog = new EventLog(logName, computerName);
             foreach (EventLogEntry eventEntry in eventLog.Entries)
                 yield return eventEntry;
+        }
+
+        public IEnumerable<string> GetLogNames(string computerName)
+        {
+            return EventLog.GetEventLogs(computerName).Select(x => x.LogDisplayName);
         }
     }
 }

@@ -50,7 +50,53 @@ namespace iEventViewer
             }
         }
         #endregion
-        public ICommand GetNextPage { get; private set; }
+        #region EventsCount (INotifyPropertyChanged Property)
+        private int _eventsCount;
+        public int EventsCount
+        {
+            get { return _eventsCount; }
+            set
+            {
+                if (_eventsCount != value)
+                {
+                    _eventsCount = value;
+                    OnPropertyChanged("EventsCount");
+                }
+            }
+        }
+        #endregion
+        #region DisplayedEventsFrom (INotifyPropertyChanged Property)
+        private int _displayedEventsFrom;
+        public int DisplayedEventsFrom
+        {
+            get { return _displayedEventsFrom; }
+            set
+            {
+                if (_displayedEventsFrom != value)
+                {
+                    _displayedEventsFrom = value;
+                    OnPropertyChanged("DisplayedEventsFrom");
+                }
+            }
+        }
+        #endregion
+        #region DisplayedEventsTo (INotifyPropertyChanged Property)
+        private int _displayedEventsTo;
+        public int DisplayedEventsTo
+        {
+            get { return _displayedEventsTo; }
+            set
+            {
+                if (_displayedEventsTo != value)
+                {
+                    _displayedEventsTo = value;
+                    OnPropertyChanged("DisplayedEventsTo");
+                }
+            }
+        }
+        #endregion
+
+        public ICommand NextPageCommand { get; private set; }
 
         public ViewModel()
         {
@@ -59,7 +105,7 @@ namespace iEventViewer
             LogNames.Add("hi");
             LogNames.Add("ho");
             _repo = new EventRepository();
-            GetNextPage = new RelayCommand(x => NextPage());
+            NextPageCommand = new RelayCommand(x => NextPage());
         }
 
 
@@ -86,7 +132,10 @@ namespace iEventViewer
         private void ImportEvents()
         {
             _allEvents = _repo.GetEvents(ComputerName, SelectedLogName);
+            EventsCount = _allEvents.Count();
             _currentPage = 0;
+            DisplayedEventsFrom = 1;
+            DisplayedEventsTo = 20;
             NextPage();
         }
 
@@ -95,6 +144,8 @@ namespace iEventViewer
             _currentPage++;
             DisplayedEvents.Clear();
             DisplayedEvents.AddRange(_allEvents.Reverse().Skip((_currentPage - 1) * 20).Take(20));
+            DisplayedEventsFrom = 20 * (_currentPage - 1) + 1;
+            DisplayedEventsTo = DisplayedEventsFrom + 19;
         }
 
         #region INotifyPropertyChanged values

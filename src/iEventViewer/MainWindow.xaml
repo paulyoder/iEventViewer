@@ -7,19 +7,35 @@
             <RowDefinition Height="100" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
-            <Label Content="Computer Name" />
-            <TextBox Text="{Binding Path=ComputerName, Mode=TwoWay}" Width="200" HorizontalAlignment="Left" />
-            <TextBox Width="200" HorizontalAlignment="Left" />
-            <ComboBox ItemsSource="{Binding LogNames}"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Label Content="Computer Name" />
+                <TextBox Text="{Binding Path=ComputerName, Mode=TwoWay}" Width="200" HorizontalAlignment="Left" />
+                <Label Content="Log Name" />
+                <ComboBox ItemsSource="{Binding LogNames}"
                       SelectedValue="{Binding Path=SelectedLogName}"
                       Width="200"
                       HorizontalAlignment="Left" />
-            <Button Content="Next Page"
-                    Command="{Binding GetNextPage}"
-                    Width="200"
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="{Binding Path=DisplayedEventsFrom}" />
+                    <Label Content=" - " />
+                    <Label Content="{Binding Path=DisplayedEventsTo}" />
+                    <Label Content=" of " />
+                    <Label Content="{Binding Path=EventsCount}" />
+                </StackPanel>
+                <Button Content="Next Page"
+                    Command="{Binding NextPageCommand}"
+                    Width="100"
                     HorizontalAlignment="Left" />
-        </StackPanel>
+            </StackPanel>
+        </Grid>
         <DataGrid Name="eventsDataGrid" ItemsSource="{Binding Path=DisplayedEvents}" AutoGenerateColumns="False" 
                   Grid.Row="1" GridLinesVisibility="None" RowHeaderWidth="0" FontSize="14">
             <DataGrid.Columns>

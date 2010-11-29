@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Threading;
 
 namespace iEventViewer
 {
@@ -13,6 +14,7 @@ namespace iEventViewer
     {
         private EventRepository _repo;
         private IEnumerable<EventLogEntry> _allEvents;
+        private List<EventLogEntry> _nextPageEvents;
         private int _currentPage;
 
         public ObservableCollection<EventLogEntry> DisplayedEvents { get; set; }
@@ -102,10 +104,9 @@ namespace iEventViewer
         {
             DisplayedEvents = new ObservableCollection<EventLogEntry>();
             LogNames = new ObservableCollection<string>();
-            LogNames.Add("hi");
-            LogNames.Add("ho");
             _repo = new EventRepository();
-            NextPageCommand = new RelayCommand(x => NextPage());
+            _nextPageEvents = new List<EventLogEntry>();
+            NextPageCommand = new RelayCommand(x => DisplayNextPageEvents());
         }
 
 
@@ -131,21 +132,33 @@ namespace iEventViewer
 
         private void ImportEvents()
         {
-            _allEvents = _repo.GetEvents(ComputerName, SelectedLogName);
+            _allEvents = _repo.GetEvents(ComputerName, SelectedLogName).Reverse();
+            _nextPageEvents.Clear();
             EventsCount = _allEvents.Count();
             _currentPage = 0;
             DisplayedEventsFrom = 1;
             DisplayedEventsTo = 20;
-            NextPage();
+            DisplayNextPageEvents();
         }
 
-        private void NextPage()
+        private void DisplayNextPageEvents()
         {
+            if (_nextPageEvents.Count == 0)
+                PrePopulateNextPage();
             _currentPage++;
             DisplayedEvents.Clear();
-            DisplayedEvents.AddRange(_allEvents.Reverse().Skip((_currentPage - 1) * 20).Take(20));
+            DisplayedEvents.AddRange(_nextPageEvents);
             DisplayedEventsFrom = 20 * (_currentPage - 1) + 1;
             DisplayedEventsTo = DisplayedEventsFrom + 19;
+
+            ThreadStart start = () => PrePopulateNextPage();
+            new Thread(start).Start();
+        }
+
+        private void PrePopulateNextPage()
+        {
+            _nextPageEvents.Clear();
+            _nextPageEvents.AddRange(_allEvents.Skip((_currentPage) * 20).Take(20));
         }
 
         #region INotifyPropertyChanged values
